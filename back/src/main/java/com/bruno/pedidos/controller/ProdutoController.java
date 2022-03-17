@@ -71,8 +71,8 @@ public class ProdutoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> atualizar(@RequestBody Produto produto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @RequestBody Produto produto) {
         HttpResponse response = new HttpResponse();
 
         try {
