@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:trab/helper/error.dart';
-import 'package:trab/model/cliente.dart';
-import 'package:trab/repositories/cliente.repository.dart';
-import 'package:trab/view/editar_cliente_page.dart';
+import 'package:trab/model/produto.dart';
+import 'package:trab/repositories/produto.repository.dart';
+import 'package:trab/view/editar_produto_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
-class ListarClientePage extends StatefulWidget {
+class ListarProdutoPage extends StatefulWidget {
   static const String routeName = '/list';
   @override
-  State<StatefulWidget> createState() => _ListarClientePageState();
+  State<StatefulWidget> createState() => _ListarProdutoPageState();
 }
 
-class _ListarClientePageState extends State<ListarClientePage> {
-  List<Cliente> _lista = <Cliente>[];
+class _ListarProdutoPageState extends State<ListarProdutoPage> {
+  List<Produto> _lista = <Produto>[];
   @override
   void initState() {
     super.initState();
@@ -26,60 +26,52 @@ class _ListarClientePageState extends State<ListarClientePage> {
 
   void _refreshList() async {
     // carrega todos e repinta a tela
-    List<Cliente> tempList = await _obterTodos();
+    List<Produto> tempList = await _obterTodos();
     setState(() {
       _lista = tempList;
     });
   }
 
-  Future<List<Cliente>> _obterTodos() async {
-    List<Cliente> tempLista = <Cliente>[];
+  Future<List<Produto>> _obterTodos() async {
+    List<Produto> tempLista = <Produto>[];
     try {
-      ClienteRepository repository = ClienteRepository();
+      ProdutoRepository repository = ProdutoRepository();
       tempLista = await repository.buscarTodos();
     } catch (exception) {
       showError(
-          context, "Erro obtendo lista de clientes", exception.toString());
+          context, "Erro obtendo lista de produtos", exception.toString());
     }
     return tempLista;
   }
 
-  void _removerCliente(int id) async {
-    // dado um id, remove o cliente da base
+  void _removerProduto(int id) async {
+    // dado um id, remove o produto da base
     try {
-      ClienteRepository repository = ClienteRepository();
+      ProdutoRepository repository = ProdutoRepository();
       await repository.remover(id);
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Cliente $id removido com sucesso.')));
+          SnackBar(content: Text('Produto $id removido com sucesso.')));
       this._refreshList();
     } catch (exception) {
-      showError(context, "Erro removendo cliente", exception.toString());
+      showError(context, "Erro removendo produto", exception.toString());
     }
   }
 
   void _showItem(BuildContext context, int index) {
-    // mostra um cliente na dialog
-    Cliente cliente = _lista[index];
+    // mostra um produto na dialog
+    Produto produto = _lista[index];
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text(cliente.nome),
+              title: Text(produto.descricao),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
                     //Icon(Icons.create),
-                    Text("Nome: ${cliente.nome}")
-                  ]),
-                  Row(children: [
-                    //Icon(Icons.assistant_photo),
-                    Text("Sobrenome: ${cliente.sobrenome}")
-                  ]),
-                  Row(children: [
-                    //Icon(Icons.cake),
-                    Text("CPF: ${cliente.cpf}")
+                    Text("Descrição: ${produto.descricao}")
                   ]),
                 ],
               ),
@@ -94,23 +86,23 @@ class _ListarClientePageState extends State<ListarClientePage> {
   }
 
   void _editItem(BuildContext context, int index) {
-    // chama tela de edição de cliente
-    Cliente c = _lista[index];
+    // chama tela de edição de produto
+    Produto c = _lista[index];
     Navigator.pushNamed(
       context,
-      EditarClientePage.routeName,
+      EditarProdutoPage.routeName,
       arguments: <String, int>{"id": c.id!},
     );
   }
 
   void _removeItem(BuildContext context, int index) {
     // confirmação de remoção
-    Cliente c = _lista[index];
+    Produto p = _lista[index];
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-              title: Text("Remover Cliente"),
-              content: Text("Gostaria realmente de remover ${c.nome}?"),
+              title: Text("Remover Produto"),
+              content: Text("Gostaria realmente de remover ${p.descricao}?"),
               actions: [
                 TextButton(
                   child: Text("Não"),
@@ -121,7 +113,7 @@ class _ListarClientePageState extends State<ListarClientePage> {
                 TextButton(
                   child: Text("Sim"),
                   onPressed: () {
-                    _removerCliente(c.id!);
+                    _removerProduto(p.id!);
                     _refreshList();
                     Navigator.of(context).pop();
                   },
@@ -131,12 +123,11 @@ class _ListarClientePageState extends State<ListarClientePage> {
   }
 
   ListTile _buildItem(BuildContext context, int index) {
-    // mostra um cliente na lista
-    Cliente c = _lista[index];
+    // mostra um produto na lista
+    Produto p = _lista[index];
     return ListTile(
       leading: Icon(Icons.pets),
-      title: Text(c.nome),
-      subtitle: Text(c.sobrenome),
+      title: Text(p.descricao),
       onTap: () {
         _showItem(context, index);
       },
@@ -161,7 +152,7 @@ class _ListarClientePageState extends State<ListarClientePage> {
     // constrói a tela
     return new Scaffold(
         appBar: AppBar(
-          title: Text("Listagem de Clientes"),
+          title: Text("Listagem de Produtos"),
         ),
         drawer: AppDrawer(),
         body: ListView.builder(

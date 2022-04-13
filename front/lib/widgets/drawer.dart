@@ -54,13 +54,13 @@ class AppDrawer extends StatelessWidget {
               icon: Icons.add,
               text: 'Inserir Cliente',
               onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.insert)),
+                  Navigator.pushReplacementNamed(context, Routes.insertCliente)),
           Divider(),
           _createDrawerItem(
               icon: Icons.list,
               text: 'Listar Clientes',
               onTap: () =>
-                  Navigator.pushReplacementNamed(context, Routes.list)),
+                  Navigator.pushReplacementNamed(context, Routes.listCliente)),
           ListTile(
             title: Text('0.0.1'),
             onTap: () {},
