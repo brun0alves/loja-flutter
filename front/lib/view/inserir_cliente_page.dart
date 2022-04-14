@@ -6,7 +6,7 @@ import 'package:trab/view/listar_cliente_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
 class InserirClientePage extends StatefulWidget {
-  static const String routeName = '/insert';
+  static const String routeName = '/insertCliente';
   @override
   _InserirClienteState createState() => _InserirClienteState();
 }
@@ -97,6 +97,12 @@ class _InserirClienteState extends State<InserirClientePage> {
                     }
                   },
                   child: Text('Salvar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancelar'),
                 ),
               ],
             )

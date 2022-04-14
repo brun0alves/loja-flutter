@@ -6,7 +6,7 @@ import 'package:trab/view/editar_produto_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
 class ListarProdutoPage extends StatefulWidget {
-  static const String routeName = '/list';
+  static const String routeName = '/listProduto';
   @override
   State<StatefulWidget> createState() => _ListarProdutoPageState();
 }

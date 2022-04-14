@@ -6,7 +6,7 @@ import 'package:trab/view/listar_produto_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
 class EditarProdutoPage extends StatefulWidget {
-  static const String routeName = '/edit';
+  static const String routeName = '/editProduto';
   @override
   _EditarProdutoState createState() => _EditarProdutoState();
 }
@@ -68,6 +68,24 @@ class _EditarProdutoState extends State<EditarProdutoPage> {
                 },
               ))
             ]),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _salvar();
+                    }
+                  },
+                  child: Text('Salvar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancelar'),
+                ),
+              ],
+            )
           ])) // Form
     ]);
   }

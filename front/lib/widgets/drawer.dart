@@ -37,7 +37,7 @@ class AppDrawer extends StatelessWidget {
               left: 16.0,
               child: Text("Cadastro de Clientes",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500))),
         ]));
@@ -61,6 +61,18 @@ class AppDrawer extends StatelessWidget {
               text: 'Listar Clientes',
               onTap: () =>
                   Navigator.pushReplacementNamed(context, Routes.listCliente)),
+          Divider(),
+          _createDrawerItem(
+              icon: Icons.list,
+              text: 'Inserir Produtos',
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Routes.insertProduto)),
+          Divider(),
+          _createDrawerItem(
+              icon: Icons.list,
+              text: 'Listar Produtos',
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, Routes.listProduto)),
           ListTile(
             title: Text('0.0.1'),
             onTap: () {},

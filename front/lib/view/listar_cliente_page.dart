@@ -6,7 +6,7 @@ import 'package:trab/view/editar_cliente_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
 class ListarClientePage extends StatefulWidget {
-  static const String routeName = '/list';
+  static const String routeName = '/listCliente';
   @override
   State<StatefulWidget> createState() => _ListarClientePageState();
 }

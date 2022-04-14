@@ -6,7 +6,7 @@ import 'package:trab/view/listar_produto_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
 class InserirProdutoPage extends StatefulWidget {
-  static const String routeName = '/insert';
+  static const String routeName = '/insertProduto';
   @override
   _InserirProdutoState createState() => _InserirProdutoState();
 }
@@ -56,6 +56,24 @@ class _InserirProdutoState extends State<InserirProdutoPage> {
                 },
               ))
             ]),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _salvar();
+                    }
+                  },
+                  child: Text('Salvar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancelar'),
+                ),
+              ],
+            )
           ])) // Form
     ]);
   }
