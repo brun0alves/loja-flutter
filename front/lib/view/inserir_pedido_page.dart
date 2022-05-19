@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
 import 'package:trab/helper/error.dart';
 import 'package:trab/model/cliente.dart';
@@ -5,8 +7,10 @@ import 'package:trab/model/itemPedido.dart';
 import 'package:trab/model/pedido.dart';
 import 'package:trab/model/produto.dart';
 import 'package:trab/repositories/pedido.repository.dart';
+import 'package:trab/repositories/produto.repository.dart';
 import 'package:trab/view/listar_pedido_page.dart';
 import 'package:trab/widgets/drawer.dart';
+
 
 class InserirPedidoPage extends StatefulWidget {
   static const String routeName = '/insertPedido';
@@ -20,13 +24,35 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
   final _clienteController = TextEditingController();
   final _sobrenomeController = TextEditingController();
   final _cpfController = TextEditingController();
+  String _dataSelecionadaLabel = '';
 
+  List<Produto> _listaProdutos = <Produto>[];
   @override
   void dispose() {
     _clienteController.dispose();
     _sobrenomeController.dispose();
     _cpfController.dispose();
     super.dispose();
+  }
+
+  void _loadProducts() async {
+    // carrega todos e repinta a tela
+    List<Produto> tempList = await _obterTodos();
+    setState(() {
+      _listaProdutos = tempList;
+    });
+  }
+
+  Future<List<Produto>> _obterTodos() async {
+    List<Produto> tempLista = <Produto>[];
+    try {
+      ProdutoRepository repository = ProdutoRepository();
+      tempLista = await repository.buscarTodos();
+    } catch (exception) {
+      showError(
+          context, "Erro obtendo lista de produtos", exception.toString());
+    }
+    return tempLista;
   }
 
   void _salvar() async {
@@ -66,6 +92,7 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
     if (dataObtida != null && dataObtida != _dataSelecionada) {
       setState(() {
         _dataSelecionada = dataObtida;
+        _dataSelecionadaLabel =dataObtida.toString();
       });
     }
   }
@@ -77,17 +104,19 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
           child: ListView(shrinkWrap: true, children: [
             Row(
               children: [
+                Text("Data: "),
+                Text(this._dataSelecionadaLabel),
                 ElevatedButton(
                   onPressed: _selecionarData,
-                  child: Text('Data'),
+                  child: Text('Selecione a Data'),
                 ),
               ],
             ),
             Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              Text("Cliente:"),
+              Text("CPF Cliente:"),
               Expanded(
-                  child: TextFormField(
-                controller: _clienteController,
+                child: TextFormField(
+                controller: _cpfController,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Campo não pode ser vazio';
@@ -96,6 +125,20 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
                 },
               ))
             ]),
+            Row(children: <Widget>[
+              Text("Produtos:"),
+              Expanded(child:  ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _listaProdutos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Produto p = _listaProdutos[index];
+                    return ListTile(
+                      title: Text(p.descricao),
+                    );
+                  },
+                ),)
+              ],
+            ),
             Row(
               children: [
                 ElevatedButton(
@@ -120,6 +163,7 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
 
   @override
   Widget build(BuildContext context) {
+    _loadProducts();
     return new Scaffold(
       appBar: AppBar(
         title: Text("Inserir Pedido"),

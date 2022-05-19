@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trab/helper/error.dart';
+import 'package:trab/model/itemPedido.dart';
 import 'package:trab/model/pedido.dart';
 import 'package:trab/repositories/pedido.repository.dart';
 import 'package:trab/view/editar_pedido_page.dart';
@@ -65,17 +66,7 @@ class _ListarPedidoPageState extends State<ListarPedidoPage> {
         builder: (BuildContext context) {
           return AlertDialog(
               title: Text('Pedido N° ' + pedido.id.toString()),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(children: [
-                    //Icon(Icons.create),
-                    Text("Produto: ${pedido.id}"),
-                    Text("Quantidade: ${pedido.cliente.cpf}"),
-                  ]),
-                ],
-              ),
+              content: dialogItensPedido(pedido),
               actions: [
                 TextButton(
                     child: Text("OK"),
@@ -84,6 +75,23 @@ class _ListarPedidoPageState extends State<ListarPedidoPage> {
                     })
               ]);
         });
+  }
+
+  Widget dialogItensPedido(Pedido p) {
+  return Container(
+      height: 250.0,
+      width: 300.0,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: p.itensPedido.length,
+        itemBuilder: (BuildContext context, int index) {
+          ItemPedido i = p.itensPedido[index];
+          return ListTile(
+            title: Text('Item: ' + i.produto.descricao + ' / Quantidade: ' + i.quantidade.toString()),
+          );
+        },
+      ),
+    );
   }
 
   void _editItem(BuildContext context, int index) {
