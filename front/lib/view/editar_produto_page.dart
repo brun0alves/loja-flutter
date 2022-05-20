@@ -80,7 +80,10 @@ class _EditarProdutoState extends State<EditarProdutoPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                      context,
+                      ListarProdutoPage.routeName,
+                    );
                   },
                   child: Text('Cancelar'),
                 ),

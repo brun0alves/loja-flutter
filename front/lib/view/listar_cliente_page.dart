@@ -134,7 +134,7 @@ class _ListarClientePageState extends State<ListarClientePage> {
     // mostra um cliente na lista
     Cliente c = _lista[index];
     return ListTile(
-      leading: Icon(Icons.pets),
+      leading: Icon(Icons.people),
       title: Text(c.nome),
       subtitle: Text(c.sobrenome),
       onTap: () {

@@ -4,6 +4,7 @@ import 'package:trab/model/produto.dart';
 import 'package:trab/repositories/produto.repository.dart';
 import 'package:trab/view/editar_produto_page.dart';
 import 'package:trab/widgets/drawer.dart';
+import 'dart:convert' show utf8;
 
 class ListarProdutoPage extends StatefulWidget {
   static const String routeName = '/listProduto';
@@ -126,7 +127,7 @@ class _ListarProdutoPageState extends State<ListarProdutoPage> {
     // mostra um produto na lista
     Produto p = _lista[index];
     return ListTile(
-      leading: Icon(Icons.pets),
+      leading: Icon(Icons.local_grocery_store_sharp),
       title: Text(p.descricao),
       onTap: () {
         _showItem(context, index);

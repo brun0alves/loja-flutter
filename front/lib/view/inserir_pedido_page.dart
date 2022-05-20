@@ -1,11 +1,11 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trab/helper/error.dart';
 import 'package:trab/model/cliente.dart';
 import 'package:trab/model/itemPedido.dart';
 import 'package:trab/model/pedido.dart';
 import 'package:trab/model/produto.dart';
+import 'package:trab/repositories/cliente.repository.dart';
 import 'package:trab/repositories/pedido.repository.dart';
 import 'package:trab/repositories/produto.repository.dart';
 import 'package:trab/view/listar_pedido_page.dart';
@@ -20,17 +20,16 @@ class InserirPedidoPage extends StatefulWidget {
 
 class _InserirPedidoState extends State<InserirPedidoPage> {
   final _formKey = GlobalKey<FormState>();
-  DateTime _dataSelecionada = DateTime.now();
-  final _clienteController = TextEditingController();
-  final _sobrenomeController = TextEditingController();
   final _cpfController = TextEditingController();
+  final _quantidadeItemController = TextEditingController();
+  Cliente cliente = Cliente(null, '', '', '');
   String _dataSelecionadaLabel = '';
+  DateTime _dataSelecionada = DateTime.now();
+  List<ItemPedido> itensPedido = <ItemPedido>[];
 
   List<Produto> _listaProdutos = <Produto>[];
   @override
   void dispose() {
-    _clienteController.dispose();
-    _sobrenomeController.dispose();
     _cpfController.dispose();
     super.dispose();
   }
@@ -55,24 +54,32 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
     return tempLista;
   }
 
+  void _salvarItem (ItemPedido item) {
+    itensPedido.removeWhere((element) => element.produto.id == item.produto.id);
+    if (item.quantidade! > 0) {
+        itensPedido.add(item);
+    }
+    _quantidadeItemController.clear();
+  }
+
   void _salvar() async {
-    Cliente cliente = new Cliente(1, 'Bruno', 'Alves', '08319314933');
-    Produto produto = new Produto(1, 'TV');
-    Produto produto2 = new Produto(2, 'TV2');
-    ItemPedido item = new ItemPedido(1, produto);
-    ItemPedido item2 = new ItemPedido(2, produto2);
-    List<ItemPedido> itensPedido = [];
-    itensPedido.add(item);
-    itensPedido.add(item2);
-    Pedido pedido = Pedido.novo(0, _dataSelecionada.toString(), cliente, itensPedido);
     try {
-      PedidoRepository repository = PedidoRepository();
-      await repository.inserir(pedido);
-      _clienteController.clear();
-      _sobrenomeController.clear();
+      ClienteRepository clienteRepository = ClienteRepository();
+      List<Cliente> clientes = await clienteRepository.buscarTodos();
+      try {
+        cliente = clientes.where((element) => element.cpf == _cpfController.text).single;
+      } catch (exception) {
+        throw (Exception('Cliente com o CPF ' +  _cpfController.text + ' não encontrado.'));
+      }
+
+      Pedido pedido = Pedido.novo(0, _dataSelecionada.toString(), cliente, itensPedido);
+      PedidoRepository pedidoRepository = PedidoRepository();
+      await pedidoRepository.inserir(pedido);
+      
       _cpfController.clear();
+      
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Pedido salvo com sucesso.')));
+          .showSnackBar(const SnackBar(content: Text('Pedido salvo com sucesso.')));
       Navigator.pushNamed(
         context,
         ListarPedidoPage.routeName,
@@ -92,7 +99,7 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
     if (dataObtida != null && dataObtida != _dataSelecionada) {
       setState(() {
         _dataSelecionada = dataObtida;
-        _dataSelecionadaLabel =dataObtida.toString();
+        _dataSelecionadaLabel = "${dataObtida.day.toString().padLeft(2,'0')}-${dataObtida.month.toString().padLeft(2,'0')}-${dataObtida.year.toString()}";
       });
     }
   }
@@ -105,7 +112,7 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
             Row(
               children: [
                 Text("Data: "),
-                Text(this._dataSelecionadaLabel),
+                Text(_dataSelecionadaLabel),
                 ElevatedButton(
                   onPressed: _selecionarData,
                   child: Text('Selecione a Data'),
@@ -134,6 +141,9 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
                     Produto p = _listaProdutos[index];
                     return ListTile(
                       title: Text(p.descricao),
+                       onTap: () {
+                        _showItem(context, index);
+                      },
                     );
                   },
                 ),)
@@ -151,7 +161,10 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                      context,
+                      ListarPedidoPage.routeName,
+                    );
                   },
                   child: Text('Cancelar'),
                 ),
@@ -161,6 +174,49 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
     ]);
   }
 
+  void _showItem(BuildContext context, int index) {
+    Produto produto = _listaProdutos[index];
+    try {
+      ItemPedido item = itensPedido.where((element) => element.produto.id == produto.id).single;
+      _quantidadeItemController.text = item.quantidade.toString();
+    } catch (exception) { }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text('Produto: ' + produto.descricao),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    Expanded(child:                     
+                      TextField(
+                        controller: _quantidadeItemController,
+                                decoration: new InputDecoration(labelText: "Informe a quantidade"),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>
+                                [FilteringTextInputFormatter.digitsOnly]
+                      ),
+                    ),
+                  ]),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    child: Text("Salvar"),
+                    onPressed: () {
+                      _salvarItem(ItemPedido(int.parse(_quantidadeItemController.text), produto));
+                      Navigator.of(context).pop();
+                }),
+                TextButton(
+                    child: Text("Cancelar"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                })
+              ]);
+        });
+  }
   @override
   Widget build(BuildContext context) {
     _loadProducts();

@@ -79,11 +79,27 @@ class _EditarClienteState extends State<EditarClientePage> {
             Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               Text("Sobrenome:"),
               Expanded(
-                  child: TextFormField(
+                child: TextFormField(
                 controller: _sobrenomeController,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Campo não pode ser vazio';
+                  }
+                  return null;
+                },
+              ))
+            ]),
+            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Text("CPF:"),
+              Expanded(
+                child: TextFormField(
+                controller: _cpfController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo não pode ser vazio';
+                  }
+                  if (value.length != 11) {
+                    return 'O CPF deve conter 11 dígitos';
                   }
                   return null;
                 },
@@ -101,7 +117,10 @@ class _EditarClienteState extends State<EditarClientePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                      context,
+                      ListarClientePage.routeName,
+                    );
                   },
                   child: Text('Cancelar'),
                 ),

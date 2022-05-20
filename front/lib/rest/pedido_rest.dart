@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:trab/model/httpException.dart';
 import 'package:trab/model/pedido.dart';
 import 'package:trab/rest/api.dart';
 
@@ -9,8 +10,8 @@ class PedidoRest {
     if (response.statusCode == 200) {
       return Pedido.fromJson(response.body);
     } else {
-      throw Exception(
-          'Erro buscando pedidos: ${id} [code: ${response.statusCode}]');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -20,7 +21,8 @@ class PedidoRest {
     if (response.statusCode == 200) {
       return Pedido.fromJsonList(response.body);
     } else {
-      throw Exception('Erro buscando todos os pedidos.');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -34,7 +36,8 @@ class PedidoRest {
     if (response.statusCode == 201) {
       return this.buscarTodos();
     } else {
-      throw Exception('Erro inserindo pedido');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -49,7 +52,8 @@ class PedidoRest {
     if (response.statusCode == 200) {
       return pedido;
     } else {
-      throw Exception('Erro alterando pedido ${pedido.id}.');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -62,7 +66,8 @@ class PedidoRest {
     if (response.statusCode == 200) {
       return this.buscarTodos();
     } else {
-      throw Exception('Erro removendo pedido: $id.');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 }

@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:trab/model/cliente.dart';
+import 'package:trab/model/httpException.dart';
 import 'package:trab/rest/api.dart';
 
 class ClienteRest {
@@ -9,8 +13,8 @@ class ClienteRest {
     if (response.statusCode == 200) {
       return Cliente.fromJson(response.body);
     } else {
-      throw Exception(
-          'Erro buscando clientes: ${id} [code: ${response.statusCode}]');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -21,7 +25,8 @@ class ClienteRest {
     if (response.statusCode == 200) {
       return Cliente.fromJsonList(response.body);
     } else {
-      throw Exception('Erro buscando todos os clientes.');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -35,7 +40,8 @@ class ClienteRest {
     if (response.statusCode == 201) {
       return this.buscarTodos();
     } else {
-      throw Exception('Erro inserindo cliente');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -50,7 +56,8 @@ class ClienteRest {
     if (response.statusCode == 200) {
       return cliente;
     } else {
-      throw Exception('Erro alterando cliente ${cliente.id}.');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 
@@ -63,7 +70,8 @@ class ClienteRest {
     if (response.statusCode == 200) {
       return this.buscarTodos();
     } else {
-      throw Exception('Erro removendo cliente: $id.');
+      HttpException httpException = HttpException.fromJson(response.body);
+      throw Exception(httpException.message);
     }
   }
 }

@@ -26,7 +26,7 @@ class _InserirClienteState extends State<InserirClientePage> {
   }
 
   void _salvar() async {
-    Cliente cliente = Cliente.novo(_nomeController.text, _sobrenomeController.text, _cpfController.text);
+    Cliente cliente = Cliente.novo(0, _nomeController.text, _sobrenomeController.text, _cpfController.text);
     try {
       ClienteRepository repository = ClienteRepository();
       await repository.inserir(cliente);
@@ -84,6 +84,9 @@ class _InserirClienteState extends State<InserirClientePage> {
                   if (value!.isEmpty) {
                     return 'Campo não pode ser vazio';
                   }
+                  if (value.length != 11) {
+                    return 'O CPF deve conter 11 dígitos';
+                  }
                   return null;
                 },
               ))
@@ -100,7 +103,10 @@ class _InserirClienteState extends State<InserirClientePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                      context,
+                      ListarClientePage.routeName,
+                    );
                   },
                   child: Text('Cancelar'),
                 ),

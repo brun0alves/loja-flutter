@@ -24,18 +24,11 @@ class AppDrawer extends StatelessWidget {
     return DrawerHeader(
         margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,
-        /*decoration: BoxDecoration(
-          color: Colors.blue,
-          /*image: DecorationImage(
-                fit: BoxFit.fitHeight,
-                image: AssetImage('assets/images/vaca.png')
-            )*/
-        ),*/
         child: Stack(children: <Widget>[
           Positioned(
               bottom: 12.0,
               left: 16.0,
-              child: Text("Cadastro de Clientes",
+              child: Text("Gerenciador de Pedidos",
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20.0,
@@ -63,7 +56,7 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, Routes.listCliente)),
           Divider(),
           _createDrawerItem(
-              icon: Icons.list,
+              icon: Icons.add,
               text: 'Inserir Produtos',
               onTap: () =>
                   Navigator.pushReplacementNamed(context, Routes.insertProduto)),
@@ -75,7 +68,7 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, Routes.listProduto)),
          Divider(),
           _createDrawerItem(
-              icon: Icons.list,
+              icon: Icons.add,
               text: 'Inserir Pedidos',
               onTap: () =>
                   Navigator.pushReplacementNamed(context, Routes.insertPedido)),

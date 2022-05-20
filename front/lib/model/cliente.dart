@@ -6,7 +6,7 @@ class Cliente {
   String sobrenome;
   String cpf;
   Cliente(this.id, this.nome, this.sobrenome, this.cpf);
-  Cliente.novo(this.nome, this.sobrenome, this.cpf);
+  Cliente.novo(this.id, this.nome, this.sobrenome, this.cpf);
 
   Map<String, dynamic> toMap() {
     return {

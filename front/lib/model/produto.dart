@@ -4,7 +4,7 @@ class Produto {
   int? id;
   String descricao;
   Produto(this.id, this.descricao);
-  Produto.novo(this.descricao);
+  Produto.novo(this.id, this.descricao);
 
   Map<String, dynamic> toMap() {
     return {

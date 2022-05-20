@@ -22,7 +22,7 @@ class _InserirProdutoState extends State<InserirProdutoPage> {
   }
 
   void _salvar() async {
-    Produto produto = Produto.novo(_descricaoController.text);
+    Produto produto = Produto.novo(0, _descricaoController.text);
     try {
       ProdutoRepository repository = ProdutoRepository();
       await repository.inserir(produto);
@@ -68,7 +68,10 @@ class _InserirProdutoState extends State<InserirProdutoPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                      context,
+                      ListarProdutoPage.routeName,
+                    );
                   },
                   child: Text('Cancelar'),
                 ),

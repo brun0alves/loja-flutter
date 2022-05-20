@@ -3,7 +3,6 @@ import 'package:trab/helper/error.dart';
 import 'package:trab/model/itemPedido.dart';
 import 'package:trab/model/pedido.dart';
 import 'package:trab/repositories/pedido.repository.dart';
-import 'package:trab/view/editar_pedido_page.dart';
 import 'package:trab/widgets/drawer.dart';
 
 class ListarPedidoPage extends StatefulWidget {
@@ -94,16 +93,6 @@ class _ListarPedidoPageState extends State<ListarPedidoPage> {
     );
   }
 
-  void _editItem(BuildContext context, int index) {
-    // chama tela de edição de pedido
-    Pedido c = _lista[index];
-    Navigator.pushNamed(
-      context,
-      EditarPedidoPage.routeName,
-      arguments: <String, int>{"id": c.id!},
-    );
-  }
-
   void _removeItem(BuildContext context, int index) {
     // confirmação de remoção
     Pedido p = _lista[index];
@@ -135,7 +124,7 @@ class _ListarPedidoPageState extends State<ListarPedidoPage> {
     // mostra um pedido na lista
     Pedido p = _lista[index];
     return ListTile(
-      leading: Icon(Icons.pets),
+      leading: Icon(Icons.attach_money),
       title: Text('N° ' + p.id.toString() + ' / Cliente ' + p.cliente.nome + ' (' + p.cliente.cpf + ')'),
       onTap: () {
         _showItem(context, index);
@@ -143,14 +132,11 @@ class _ListarPedidoPageState extends State<ListarPedidoPage> {
       trailing: PopupMenuButton(
         itemBuilder: (context) {
           return [
-            PopupMenuItem(value: 'edit', child: Text('Editar')),
             PopupMenuItem(value: 'delete', child: Text('Remover'))
           ];
         },
         onSelected: (String value) {
-          if (value == 'edit')
-            _editItem(context, index);
-          else
+          if (value == 'delete')
             _removeItem(context, index);
         },
       ),
