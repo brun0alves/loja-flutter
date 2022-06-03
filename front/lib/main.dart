@@ -18,11 +18,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pedidos',
+      title: 'Gerenciador de Pedidos',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Pedidos'),
+      home: ListarPedidoPage(),
       routes: {
         Routes.editCliente: (context) => EditarClientePage(),
         Routes.insertCliente: (context) => InserirClientePage(),
