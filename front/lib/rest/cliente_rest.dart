@@ -19,7 +19,6 @@ class ClienteRest {
   }
 
   Future<List<Cliente>> buscarTodos() async {
-    final teste  = API.endpoint;
     final http.Response response =
         await http.get(Uri.http(API.endpoint, "cliente/"));
     if (response.statusCode == 200) {
