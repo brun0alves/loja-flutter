@@ -56,7 +56,7 @@ public class ProdutoController {
 
         try {
             if(produtoRepository.verificaProdutoExistente(produto.getId(), produto.getDescricao()) > 0) {
-                throw new Exception("Erro ao cadastrar o produto " + produto.getDescricao() + ". Motivo: Já existe um produto com essa descrição.");
+                throw new Exception("Erro ao cadastrar o produto " + produto.getDescricao() + ". Motivo: Ja existe um produto com essa descrição.");
             }
 
             produtoRepository.save(produto);
@@ -77,7 +77,7 @@ public class ProdutoController {
 
         try {
             if(produtoRepository.verificaProdutoExistente(produto.getId(), produto.getDescricao()) > 0) {
-                throw new Exception("Erro ao cadastrar o produto " + produto.getDescricao() + ". Motivo: Já existe um produto com essa descrição.");
+                throw new Exception("Erro ao cadastrar o produto " + produto.getDescricao() + ". Motivo: Ja existe um produto com essa descrição.");
             }
 
             produtoRepository.save(produto);

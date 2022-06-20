@@ -54,7 +54,7 @@ public class ClienteController {
 
         try {
             if(clienteRepository.verificaCpfUnico(cliente.getCpf(), cliente.getId()) > 0) {
-                throw new Exception("Erro ao cadastrar o Cliente. Motivo: Já existe um cliente com o CPF " + cliente.getCpf() + " cadastrado no sistema.");
+                throw new Exception("Erro ao cadastrar o Cliente. Motivo: Ja existe um cliente com o CPF " + cliente.getCpf() + " cadastrado no sistema.");
             }
 
             clienteRepository.save(cliente);
@@ -75,7 +75,7 @@ public class ClienteController {
 
         try {
             if(clienteRepository.verificaCpfUnico(cliente.getCpf(), cliente.getId()) > 0) {
-                throw new Exception("Erro ao atualizar o Cliente. Motivo: Já existe um cliente com o CPF " + cliente.getCpf() + " cadastrado no sistema.");
+                throw new Exception("Erro ao atualizar o Cliente. Motivo: Ja existe um cliente com o CPF " + cliente.getCpf() + " cadastrado no sistema.");
             }
 
             clienteRepository.save(cliente);
