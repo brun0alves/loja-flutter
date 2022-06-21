@@ -221,6 +221,7 @@ class _InserirPedidoState extends State<InserirPedidoPage> {
   Widget build(BuildContext context) {
     _loadProducts();
     return new Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Inserir Pedido"),
       ),
